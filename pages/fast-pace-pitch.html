@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Pace Pitch — Inline Inputs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fafafa;
+            color: #111;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 900px;
+            padding: 40px 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+            overflow-y: auto;
+            height: 90vh;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            color: #ff6f61;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #ff6f61;
+            margin-top: 50px;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #ff6f61;
+            padding-bottom: 8px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        ul li h3 {
+            margin: 0;
+            flex: 1;
+            font-weight: 500;
+            font-size: 1.2em;
+        }
+
+        input,
+        select {
+            padding: 5px 8px;
+            font-size: 1em;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            min-width: 120px;
+        }
+
+        #summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff1ef;
+            border-radius: 10px;
+            font-size: 1em;
+            white-space: pre-wrap;
+        }
+
+        #rbo-buttons button {
+            background-color: #ff6f61;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        #rbo-buttons button:hover {
+            background-color: #e0554b;
+            transform: translateY(-2px);
+        }
+
+        #rbo-display {
+            background: #fff1ef;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            margin-top: 20px;
+            min-height: 80px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1000px) {
+            body {
+                flex-direction: column;
+                align-items: center;
+                height: auto;
+                overflow: auto;
+            }
+
+            .container {
+                width: 95%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Fast Pace Pitch</h1>
+        <ul>
+            <li>
+                <h3>Bonjour mon nom c'est [Nom]</h3>
+            </li>
+            <li>
+                <h3>Je réduis les taux de machines Interac de 30% à 40%</h3>
+            </li>
+            <li>
+                <h3>Est-ce-que je peux savoir Vous êtes avec qui ?</h3>
+                <select id="pitchProvider">
+                    <option value="">-- Choisir --</option>
+                    <option>Moneris</option>
+                    <option>FirstData</option>
+                    <option>Global</option>
+                    <option>TD</option>
+                    <option>Nuvei</option>
+                    <option>Elavon</option>
+                </select>
+            </li>
+            <li>
+                <h3>Vous avez combien de machines ?</h3>
+                <select id="pitchMachines"></select>
+            </li>
+            <li>
+                <h3>Parfait ! Et votre nom ?</h3>
+                <input type="text" id="ownerName" placeholder="Nom du propriétaire">
+            </li>
+            <li>
+                <h3>Parfait, gardez la ligne, un spécialiste va vous rejoindre.</h3>
+            </li>
+        </ul>
+
+        <div id="summary">Résumé des infos...</div>
+
+        <h2>Objections Rapides — Cliquez pour voir la réponse</h2>
+        <div id="rbo-buttons">
+            <button onclick="showRBO('justSwitched')">Je viens de changer</button>
+            <button onclick="showRBO('notInterested')">Pas intéressé</button>
+            <button onclick="showRBO('onContract')">Je suis sous contrat</button>
+            <button onclick="showRBO('dontWannaSwitch')">Je ne veux pas changer</button>
+            <button onclick="showRBO('tenCalls')">Je reçois 10 appels comme ça par jour</button>
+            <button onclick="showRBO('showAll')">Voir toutes les objections</button>
+        </div>
+        <div id="rbo-display"></div>
+    </div>
+
+    <script>
+        // Populate machines dropdown
+        const machines = document.getElementById('pitchMachines');
+        for (let i = 1; i <= 20; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;
+            machines.appendChild(opt);
+        }
+
+        const pitchProvider = document.getElementById('pitchProvider');
+        const pitchMachines = document.getElementById('pitchMachines');
+        const ownerName = document.getElementById('ownerName');
+        const summary = document.getElementById('summary');
+
+        // Dynamically update Résumé des infos
+        function updateSummary() {
+            summary.textContent =
+                `Fournisseur actuel: ${pitchProvider.value || "(non spécifié)"}\n` +
+                `Machines: ${pitchMachines.value || "(non spécifié)"}\n` +
+                `Nom du propriétaire: ${ownerName.value || "(non spécifié)"}`;
+        }
+
+        [pitchProvider, pitchMachines, ownerName].forEach(el => el.addEventListener('input', updateSummary));
+
+        const rboData = {
+            justSwitched: {
+                ledge: "Ok, puis c'était quoi la raison du changement?",
+                disrupt: "Totalement je comprends, écoute, c’est sûr que à la fin de l’appel il n'y a personne qui va vous demander de changer, le but de l’appel c’est juste pour vous informer, au meilleur des cas je pourrai vous donner un meilleur deal pis au pire, l’info que je vous donne va vous aider à garder votre fournisseur actuel honnête avec vous.",
+                ask: "Vous êtes avec qui en ce moment?<br>Combien de terminaux?",
+                transfer: "Parfait, gardez la ligne un spécialiste va vous rejoindre."
+            },
+            notInterested: {
+                ledge: "Vous avez déjà un fournisseur en ce moment ou vous n’acceptez pas de paiement crédit/débit?",
+                disrupt: "Je comprends exactement ce que vous ressentez, en fait, tout le monde avec qui je parle la première fois ressent la même chose, puis par la suite 8 fois sur 10, la personne me remercie de les avoir appelés après avoir vu ce qu’on peut leur offrir.",
+                ask: "Vous êtes avec qui en ce moment?<br>Combien de terminaux?",
+                transfer: "Parfait, gardez la ligne un spécialiste va vous rejoindre."
+            },
+            onContract: {
+                ledge: "Je comprends - C’est quand que votre contrat se termine?",
+                disrupt: "Super, écoute, le but de l’appel c’est pas de vous faire changer, c’est juste de l’information, au meilleur des cas oui je vais vous donner un deal et vous rembourser les frais de votre contrat, au pire, l’info que je vous donne aujourd'hui va vous permettre de garder votre fournisseur actuel honnête avec vous.",
+                ask: "Vous êtes avec qui en ce moment?<br>Combien de terminaux?",
+                transfer: "Parfait, gardez la ligne un spécialiste va vous rejoindre."
+            },
+            tenCalls: {
+                ledge: "Oui j’avoue que ça peut être un peu tannant, est-ce-que je peux au moins vous dire comment moi je suis différent des autres qui vous appellent?",
+                disrupt: "Donc moi je vous appelle de la source POS, nous c’est pas un vendeur, c’est un courtier, ce qu’on fait c’est on rassemble le volume de tous nos clients, pis on s’en va vers les grosses compagnies pour négocier un deal, pis on accepte seulement le deal qui est sans contrat, qui a les frais fixes tout au courant de l'année, puis qui vous offre les meilleurs taux dans le marché.",
+                ask: "Vous êtes avec qui en ce moment?<br>Combien de terminaux?",
+                transfer: "Parfait, gardez la ligne un spécialiste va vous rejoindre."
+            },
+            dontWannaSwitch: {
+                ledge: "Vous êtes satisfait de votre service actuel?",
+                disrupt: "Super, écoute le but de l’appel c’est pas de vous faire changer, au meilleur, oui on va vous donner un meilleur deal, au pire, vous allez utiliser l’info que je vous donne aujourd'hui pour garder votre fournisseur actuel honnête avec vous.",
+                ask: "Vous êtes avec qui en ce moment?<br>Combien de terminaux?",
+                transfer: "Parfait, gardez la ligne un spécialiste va vous rejoindre."
+            }
+        };
+
+
+        function showRBO(rbo) {
+            const display = document.getElementById('rbo-display');
+            if (rbo === 'showAll') {
+                let html = '';
+                for (const key in rboData) {
+                    html += `<strong>${key.replace(/([A-Z])/g, ' $1')}</strong><br>
+                   <em>Ledge:</em> ${rboData[key].ledge}<br>
+                   <em>Disrupt:</em> ${rboData[key].disrupt}<br>
+                   <em>Ask:</em> ${rboData[key].ask}<br>
+                   <em>Transfer:</em> ${rboData[key].transfer}<br><br>`;
+                }
+                display.innerHTML = html;
+            } else {
+                display.innerHTML = `<strong>Ledge:</strong> ${rboData[rbo].ledge}<br>
+                             <strong>Disrupt:</strong> ${rboData[rbo].disrupt}<br>
+                             <strong>Ask:</strong> ${rboData[rbo].ask}<br>
+                             <strong>Transfer:</strong> ${rboData[rbo].transfer}`;
+            }
+        }
+    </script>
+</body>
+
+</html>

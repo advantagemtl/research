@@ -1,0 +1,38 @@
+   /* Universal styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #222;
+        }
+
+        p {
+            font-weight: 400;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: justify;
+        }
+
+        /* Optional: add some subtle emphasis for traits */
+        strong {
+            color: #222;
+            font-weight: 500;
+        }

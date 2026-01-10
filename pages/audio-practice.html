@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retro Audio Player</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+  :root {
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --primary: #6366f1;
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --border: #e5e7eb;
+    --shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+  }
+
+  .container {
+    background: var(--card);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  h1 {
+    margin: 0 0 1.5rem;
+    font-size: 2.2rem;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+
+  .controls {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  select {
+    padding: 14px 16px;
+    font-size: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: white;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  button {
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 160px;
+  }
+
+  button:first-child {
+    background: var(--primary);
+    color: white;
+  }
+
+  button:last-child {
+    background: #10b981;
+    color: white;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  audio {
+    width: 100%;
+    margin-top: 2rem;
+    border-radius: 12px;
+    outline: none;
+  }
+
+  audio::-webkit-media-controls-panel {
+    background: rgba(255,255,255,0.9);
+    border-radius: 12px;
+  }
+
+  footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 2rem; }
+    h1 { font-size: 1.8rem; }
+    button { padding: 12px 16px; font-size: 0.95rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Audio Player</h1>
+
+  <div class="controls">
+    <select id="audioSelect">
+      <option value="" disabled selected>Choose an audio track...</option>
+    </select>
+
+    <div class="buttons">
+      <button onclick="playSelectedAudio()">Play Selected</button>
+      <button onclick="playRandomAudio()">Play Random</button>
+    </div>
+  </div>
+
+  <audio id="audioPlayer" controls></audio>
+
+  <footer>Enjoy your music collection</footer>
+</div>
+
+<script>
+// List of audio files in the ../audio folder
+const audioFolder = '../audio/';
+const audioFiles = [
+  'audio1.m4a',
+  'audio2.m4a',
+  'audio3.m4a',
+  'audio4.m4a',
+  'audio6.m4a',
+  'audio8.m4a'
+  // Add more files here
+];
+
+const select = document.getElementById('audioSelect');
+
+// Populate dropdown with nicer names
+audioFiles.forEach((file, index) => {
+  const option = document.createElement('option');
+  const cleanName = file.replace('.m4a', '').replace(/audio/, 'Track ');
+  option.value = audioFolder + file;
+  option.textContent = cleanName;
+  select.appendChild(option);
+});
+
+function playRandomAudio() {
+  const randomIndex = Math.floor(Math.random() * audioFiles.length);
+  const audioPlayer = document.getElementById('audioPlayer');
+  audioPlayer.src = audioFolder + audioFiles[randomIndex];
+  audioPlayer.play();
+  
+  // Highlight random selection
+  select.selectedIndex = randomIndex + 1; // +1 because of placeholder
+}
+
+function playSelectedAudio() {
+  const audioPlayer = document.getElementById('audioPlayer');
+  if (select.value) {
+    audioPlayer.src = select.value;
+    audioPlayer.play();
+  } else {
+    alert("Please select an audio file first!");
+  }
+}
+</script>
+
+</body>
+</html>

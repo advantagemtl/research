@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact Extractor — Fixed Website Detection</title>
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:24px;background:#f6f7fb;color:#111}
+    .container{max-width:880px;margin:0 auto;background:white;padding:18px;border-radius:12px;box-shadow:0 6px 24px rgba(20,20,50,0.06)}
+    textarea{width:100%;height:200px;padding:12px;border-radius:8px;border:1px solid #e1e4ee;resize:vertical;font-family:monospace}
+    label{display:block;margin-top:12px;font-weight:600}
+    .row{display:flex;gap:12px;align-items:center}
+    input[type=text]{flex:1;padding:10px;border-radius:8px;border:1px solid #e1e4ee}
+    button{padding:10px 14px;border-radius:8px;border:0;background:#111;color:white;cursor:pointer}
+    button:hover{background:#333}
+    .result{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .note{font-size:13px;color:#666;margin-top:8px}
+    .small{font-size:12px;color:#444}
+    .success{color:green;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Contact Extractor — Now with Smart Website Detection</h2>
+    <p class="note">Paste any Google Maps business snippet. Now accurately detects websites even when shown as plain domains like maidgonegreen.com</p>
+
+    <label for="raw">Raw text</label>
+    <textarea id="raw" placeholder="Paste the business info here...">Maids Gone Green
+House cleaning service
+
+Directions Save Nearby Send to phone Share
+
+625 Buck Rd, Kelowna, BC V1W 1N6
+Open · Closes 6 p.m.
+(250) 878-6543
+maidgonegreen.com
+RG77+QC Kelowna, British Columbia
+Claim this business</textarea>
+
+    <div style="margin-top:12px" class="row">
+      <button id="extract">Extract</button>
+      <button id="clear">Clear</button>
+      <button id="copyAll">Copy All Fields</button>
+    </div>
+
+    <div class="result" id="fields">
+      <div>
+        <label>Company :</label>
+        <input type="text" id="company" placeholder="Company" />
+      </div>
+      <div>
+        <label>Phone :</label>
+        <input type="text" id="phone" placeholder="Phone" />
+      </div>
+      <div>
+        <label>Website :</label>
+        <input type="text" id="website" placeholder="website (if found)" />
+      </div>
+      <div>
+        <label>Owner :</label>
+        <input type="text" id="owner" placeholder="[Leave this blank]" />
+      </div>
+      <div>
+        <label>Last called as :</label>
+        <input type="text" id="lastCalledAs" placeholder="[Leave blank]" />
+      </div>
+      <div>
+        <label>Last called from :</label>
+        <input type="text" id="lastCalledFrom" placeholder="[Leave blank]" />
+      </div>
+    </div>
+
+    <p class="note">Now detects: example.com • www.example.com • https://example.com • even subdomain.site.co.uk</p>
+  </div>
+
+  <script>
+    function extractFromText(text){
+      const lines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
+
+      // === COMPANY NAME ===
+      let company = '';
+      for (let line of lines) {
+        // Skip obvious non-company lines
+        if (/^(Directions|Save|Nearby|Share|Send|Claim|Open|Closes|·|Rating|Review|http|www\.|\d{3,}|@|\+|RG[0-9A-Z]{2,}|V[0-9A-Z]\s+\d|[A-Za-z]{2}\d{3,})/i.test(line)) continue;
+        if (line.length < 2 || line.length > 80) continue;
+        if (/\d/.test(line) && !/[A-Za-z]{3,}/.test(line)) continue; // mostly numbers
+        if (/cleaning|service|plumbing|roofing|contractor|inc\.?|ltd\.?|llc/i.test(line) && company) continue; // descriptor after name
+        if (!company && /[A-Za-z]/.test(line)) {
+          company = line;
+          break;
+        }
+      }
+
+      // === PHONE ===
+      const phoneRegex = /(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/g;
+      const phoneMatches = text.match(phoneRegex);
+      const phone = phoneMatches ? phoneMatches[0].replace(/[^\d+]/g, '').replace(/^1/, '') // clean & remove leading 1
+        .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3') : '';
+
+      // === WEBSITE - MUCH SMARTER NOW ===
+      let website = '';
+
+      // Most robust regex for domains (including international TLDs)
+      const urlRegex = /(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.(?:com|ca|co\.uk|org|net|io|co|biz|info|app|dev|me|tv|cc|[a-z]{2,}))(?:\b|$)/gi;
+
+      const matches = [...text.matchAll(urlRegex)];
+      if (matches.length > 0) {
+        // Take the cleanest-looking domain
+        website = matches[0][0].toLowerCase().trim().replace(/,$/, '');
+
+        // Prepend https:// if missing
+        if (!website.startsWith('http') && !website.startsWith('www.')) {
+          website = 'https://www.' + website;
+        } else if (website.startsWith('www.')) {
+          website = 'https://' + website;
+        } else if (!website.startsWith('http')) {
+          website = 'https://' + website;
+        }
+      }
+
+      // Fallback: look for standalone domain-like string on its own line
+      if (!website) {
+        for (let line of lines) {
+          const clean = line.replace(/[⋅•·•]/g, '').trim();
+          if (/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.(com|ca|org|net|io|co|biz|app|co\.uk|uk|au)$/i.test(clean)) {
+            website = 'https://www.' + clean.toLowerCase();
+            break;
+          }
+        }
+      }
+
+      return { company: company || '', phone, website };
+    }
+
+    document.getElementById('extract').addEventListener('click', () => {
+      const raw = document.getElementById('raw').value.trim();
+      if (!raw) return alert('Please paste some text first');
+
+      const { company, phone, website } = extractFromText(raw);
+
+      document.getElementById('company').value = company;
+      document.getElementById('phone').value = phone;
+      document.getElementById('website').value = website;
+
+      // Clear extra fields
+      document.getElementById('owner').value = '';
+      document.getElementById('lastCalledAs').value = '';
+      document.getElementById('lastCalledFrom').value = '';
+
+      // Feedback
+      if (website) {
+        document.querySelector('.note').innerHTML += ' <span class="success">Website found!</span>';
+        setTimeout(() => document.querySelector('.success')?.remove(), 3000);
+      }
+    });
+
+    document.getElementById('clear').addEventListener('click', () => {
+      document.getElementById('raw').value = '';
+      document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+    });
+
+    document.getElementById('copyAll').addEventListener('click', () => {
+      const fields = {
+        'Company': document.getElementById('company').value,
+        'Phone': document.getElementById('phone').value,
+        'Website': document.getElementById('website').value,
+        'Owner': document.getElementById('owner').value,
+        'Last called as': document.getElementById('lastCalledAs').value,
+        'Last called from': document.getElementById('lastCalledFrom').value,
+      };
+
+      const text = Object.entries(fields)
+        .map(([k, v]) => `${k.padEnd(16)} : ${v}`.trim())
+        .join('\n');
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert('All fields copied to clipboard!');
+      });
+    });
+
+    // Auto-extract on load
+    window.addEventListener('load', () => {
+      setTimeout(() => document.getElementById('extract').click(), 100);
+    });
+  </script>
+</body>
+</html>
