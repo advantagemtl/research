@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BABY THE PUA | FIELD REPORTS</title>
+    <title>BABY THE PUA | FIELD REPORTS • VOL. I</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Georgia&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -13,110 +15,152 @@
         }
 
         body {
-            font-family: "Courier New", Courier, monospace;
-            background: #f9f6e8;
-            color: #000;
-            line-height: 1.6;
-            max-width: 640px;
-            margin: 80px auto;
-            padding: 0 40px;
-            border: 8px double #000;
-            background-image:
-                linear-gradient(#f9f6e8 1px, transparent 1px),
-                linear-gradient(90deg, #f9f6e8 1px, transparent 1px);
-            background-size: 100% 24px, 24px 100%;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            font-family: 'EB Garamond', Georgia, serif;
+            background: #fdfcf8 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" /><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.4"/></svg>') repeat;
+            color: #111;
+            line-height: 1.74;
+            font-size: 1.14rem;
+            max-width: 740px;
+            margin: 70px auto;
+            padding: 0 60px 80px;
+            background-color: #fdfcf8;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.14);
+            border: 1px solid #d0c9b8;
         }
 
         header {
             text-align: center;
-            margin-bottom: 60px;
-            padding: 30px 0 20px;
-            border-bottom: 3px double #000;
+            margin: 90px 0 110px;
+            padding-bottom: 50px;
+            border-bottom: 2px solid #000;
         }
 
         header h1 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
+            font-size: 3.1rem;
+            font-weight: 700;
             letter-spacing: 4px;
+            text-transform: uppercase;
             margin-bottom: 10px;
         }
 
         header p {
-            font-size: 0.9rem;
+            font-size: 1.15rem;
             font-style: italic;
-            letter-spacing: 1px;
+            color: #444;
         }
 
         .cast {
-            margin: 40px 0;
-            font-size: 0.95rem;
-            line-height: 1.8;
+            margin: 70px 0;
+            font-size: 1.05rem;
+            line-height: 1.9;
+            padding: 25px 35px;
+            border: 1px dashed #777;
+            background: rgba(0, 0, 0, 0.018);
         }
 
-        .cast p {
-            margin-bottom: 8px;
+        .cast strong {
+            font-variant: small-caps;
+            letter-spacing: 0.5px;
         }
 
         .epigraph {
-            margin: 50px 20px 60px;
+            margin: 90px 70px;
             font-style: italic;
             text-align: center;
-            line-height: 1.7;
-            border-top: 1px solid #000;
-            border-bottom: 1px solid #000;
-            padding: 20px 0;
+            line-height: 1.82;
+            font-size: 1.08rem;
+            color: #2f2f2f;
+            padding: 45px 0;
+            border-top: 1px solid #999;
+            border-bottom: 1px solid #999;
         }
 
         .entry {
-            margin-bottom: 50px;
+            margin-bottom: 100px;
             position: relative;
         }
 
         .entry h2 {
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1.8px;
+            margin: 70px 0 35px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #000;
-            display: inline-block;
+            color: #000;
+        }
+
+        .entry h2::before,
+        .entry h2::after {
+            content: "———";
+            display: block;
+            font-size: 1.5rem;
+            color: #666;
+            margin: 12px 0;
+            letter-spacing: 6px;
+        }
+
+        .entry h3 {
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 1.5em 0 1em;
+            color: #222;
         }
 
         .entry p {
-            margin-bottom: 1rem;
+            margin-bottom: 1.45em;
             text-align: justify;
-            hanging-punctuation: first;
+            hyphens: auto;
         }
 
-        .entry p:first-letter {
-            font-size: 2.2em;
-            line-height: 0.8;
+        .entry p:first-of-type:first-letter {
             float: left;
-            margin-right: 6px;
+            font-size: 4.1rem;
+            line-height: 0.72;
             font-weight: bold;
+            margin: 0 14px 4px 0;
+            color: #000;
         }
 
-        .page-break {
-            page-break-before: always;
-            margin-top: 60px;
-            border-top: 2px dashed #999;
-            padding-top: 30px;
+        hr.page-break {
+            margin: 120px 0 100px;
+            border: none;
+            border-top: 1px dashed #555;
             text-align: center;
-            font-style: italic;
-            color: #555;
+        }
+
+        hr.page-break::after {
+            content: "• • •";
+            display: block;
+            margin-top: -14px;
+            font-size: 1.6rem;
+            color: #444;
+            letter-spacing: 8px;
+        }
+
+        .dialogue strong {
+            font-weight: 700;
+            color: #000;
         }
 
         footer {
             text-align: center;
-            margin-top: 80px;
-            padding-top: 30px;
-            border-top: 2px solid #000;
-            font-size: 0.8rem;
+            margin: 140px 0 80px;
+            padding-top: 50px;
+            border-top: 1px solid #000;
+            font-size: 0.95rem;
+            color: #555;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+        }
+
+        .page-num {
+            position: absolute;
+            bottom: -50px;
+            right: 20px;
+            font-size: 0.95rem;
+            color: #666;
+            font-style: italic;
         }
 
         @media print {
@@ -124,26 +168,32 @@
                 background: white;
                 box-shadow: none;
                 border: none;
+                margin: 0;
+                padding: 1in 0.9in 1.2in;
             }
 
             .page-break {
                 page-break-before: always;
             }
+
+            .page-num {
+                display: none;
+            }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             body {
-                margin: 40px auto;
-                padding: 20px;
-                border-width: 4px;
+                padding: 0 30px 60px;
+                margin: 50px auto;
+                font-size: 1.08rem;
             }
 
             header h1 {
-                font-size: 1.5rem;
+                font-size: 2.5rem;
             }
 
-            .entry p:first-letter {
-                font-size: 1.8em;
+            .entry p:first-of-type:first-letter {
+                font-size: 3.4rem;
             }
         }
     </style>
@@ -157,21 +207,17 @@
     </header>
 
     <div class="cast">
-        <p><strong>Debora</strong> : chick I approached</p>
-        <p><strong>BABY</strong> : My Pickup Artist Name</p>
-        <p><strong>BUDDY - Buddy - Bats - Doc - Griff</strong> : Side Character - Wingman - Friend</p>
-        <p><strong>One Itis</strong> : That one girl I fell in love with</p>
-        <p><strong>Objective</strong> : To be the best PUA in the world.</p>
+        <p><strong>Debora</strong> — chick I approached</p>
+        <p><strong>BABY</strong> — My Pickup Artist Name</p>
+        <p><strong>BUDDY - Buddy - Bats - Doc - Griff</strong> — Side Character - Wingman - Friend</p>
+        <p><strong>One Itis</strong> — That one girl I fell in love with</p>
+        <p><strong>Objective</strong> — To be the best PUA in the world.</p>
     </div>
 
-    <div class="epigraph">
-        “I could not become anything; neither good nor bad; neither a scoundrel nor an honest man; neither a hero nor an
-        insect. And now I am eking out my days in my corner, taunting myself with the bitter and entirely useless
-        consolation that an intelligent man cannot seriously become anything, that only a fool can become
-        something.”<br>
-        <br>
-        — <em>Notes from Underground</em>
-    </div>
+
+    <hr class="page-break">
+
+
 
     <div class="entry">
         <h2>Approach anxiety</h2>
@@ -181,8 +227,7 @@
         <p>target to avoid overthinking and blowing it. seduction is not for the timid.</p>
     </div>
 
-    <div class="page-break">— — —</div>
-
+ 
     <div class="entry">
         <h2>My one Itis</h2>
         <p>I met debora at the subway, despite the age difference (she's 7 years older than me), she gave me her IG,</p>
@@ -202,7 +247,7 @@
         <p>approaching women. but being a pussy instead.</p>
     </div>
 
-    <div class="page-break">— — —</div>
+ 
 
     <div class="entry">
         <h2>Going in a gimp suit</h2>
@@ -221,7 +266,7 @@
         <p>it. and to face it.</p>
     </div>
 
-    <div class="page-break">— — —</div>
+  
 
     <div class="entry">
         <h2>Some rejections will always sting.</h2>
@@ -235,7 +280,7 @@
         </p>
         <p>and rejection.</p>
     </div>
-    <div class="page-break">— — —</div>
+
     <div class="entry">
         <h2>Breaking The Ice</h2>
         <p>So I approached 5 chicks finally, and it was desencetizing, but since the metro was on curfew, i couldnt</p>
@@ -248,7 +293,7 @@
         <p>it's as if Murphy came in person to visit me to apply his law on me. you know what, I still aspire to</p>
         <p>become the world's greatest pickup artist. but i'm stuck on Day 7 of rules of the game.</p>
     </div>
-    <div class="page-break">— — —</div>
+   
     <div class="entry">
         <h2>Not a One Itis</h2>
 
@@ -270,7 +315,7 @@
 
         <p>She had a blank, almost ordinary expression on her face. But I fled the scene.</p>
     </div>
-    <div class="page-break">— — —</div>
+  
     <div class="entry">
         <h2>Inconsistency vs Game — Isolation is dangerous</h2>
         <p>I wanted to apply the game. I wanted to ask that opinion opener. But breaking the ice again was so lame. I
@@ -282,7 +327,7 @@
             objective isn’t the perfect approach, it’s the ice break.</p>
     </div>
 
-    <div class="page-break">— — —</div>
+ 
 
 
     <div class="entry">
@@ -316,8 +361,7 @@
             suit and headed the fuck out. And today, I’m still awkward?</p>
     </div>
 
-    <div class="page-break">— — —</div>
-
+ 
     <div class="entry">
         <h2>Wingman</h2>
         <p>Since Buddy made me super self-conscious, I texted him, explaining the issue and asking for help — asking him
@@ -500,73 +544,12 @@
         </p>
     </div>
 
-    <div class="entry">
-        <h2>Subject: The Office Chad Paradox – Shattering the Looksmax Cope</h2>
-
-        <p>
-            <strong>Field Report: The Office Chad Paradox – Shattering the Looksmax Cope</strong><br><br>
-
-            <strong>Title:</strong> Confirmation Bias Exposed – When a 5'5" Fat Guy with a Tiny Dick Outpulls Every
-            "Chad" in the Building<br><br>
-
-            <strong>Background / My Grind Phase</strong><br>
-            Back in my early PUA days, I was grinding like a man possessed. Broken nose from boxing (still healing,
-            adding to the "sub-8" vibe), virgin status clinging to me like a curse, and a brutal 18-month drought
-            despite hitting 15-30 approaches per day. Cold approaches, daygame during lunch breaks downtown, forcing
-            myself to open without flinching. No dates. No kisses. Zero closes. Just pure volume and rejection stacking
-            for a year and a half. Most guys would've quit, swallowed the blackpill, and declared "it's over." I kept
-            paying the price.<br><br>
-
-            <strong>The Encounter – Enter the Arrogant Mini-King</strong><br>
-            One lunch break, I'm out doing my numbers game, finally feeling the small W of talking to women without my
-            voice cracking. Then this guy rolls up—arrogant as hell, zero filter. I try recruiting him for approaches:
-            "Yo, come cold approach with me." His response?<br><br>
-
-            "Nahhh, I got way too many bitches. Women should approach me."<br><br>
-
-            And bro... he wasn't bluffing. This dude was drowning in office pussy. Slept with almost every girl in the
-            building. The very first girl I approached on day one—who shut me down cold, arrogant and dismissive—was one
-            of his regular booty calls. He just had to ask, and it was on.<br><br>
-
-            Now picture this "Chad":<br>
-            - White<br>
-            - 5'5" (short king territory)<br>
-            - Overweight, zero muscle tone<br>
-            - According to multiple sources (including his ex-girlfriend, who I later dated, and one of his booty
-            calls): tiny dick (under 4 inches)<br><br>
-
-            No height, no frame, no looks halo, no rumored horse cock. Just pure, unapologetic frame and IDGAF energy.
-            He refused to approach because he believed the script should flip—women chase him. And they did.<br><br>
-
-            <strong>The Irony & Full-Circle Win</strong><br>
-            Fast-forward 12 months: After finally cracking my first lay and building momentum, I end up dating his
-            ex-girlfriend—my second real relationship. The same girl who was part of his harem now saw what real
-            persistence and calibration look like. Full-circle proof that the game isn't locked behind genetics.<br><br>
-
-            <strong>Key Takeaway – Anti-Blackpill Ammo</strong><br>
-            This isn't some fairy tale or hidden status/money cope. It's a living, breathing counter to the "looks or
-            GTFO" narrative. If a short, fat, allegedly micro-dicked guy can pull more tail than a toilet seat—purely
-            off arrogance, pre-selection, and refusing to pedestalize—then the blackpill's "determinism"
-            crumbles.<br><br>
-
-            Attraction isn't 100% halo effect. Frame, social proof, entitlement, and sheer unwillingness to chase can
-            override a ton of physical deficits.<br><br>
-
-            I paid the price for 18 months—reps, ego death, zero validation. Victory didn't come easy, but when it came,
-            it came hard.<br><br>
-
-            Sun Tzu said it best:<br>
-            "Victory is reserved for those who are willing to pay its price."<br><br>
-
-            I paid in full. The blackpill bros? Still coping in the comments, calling it an "outlier." Nah. It's proof:
-            Grind > Genetics when you own the frame.<br><br>
-
-            Let that sink in, kings.
-        </p>
-    </div>
-
     <footer>
         <p>BABY THE PUA | THE UNDERGROUND CHRONICLES | VOL. I</p>
+    </footer>
+
+    <footer>
+        BABY THE PUA • THE UNDERGROUND CHRONICLES • VOL. I
     </footer>
 
 </body>
